@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <!--<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />-->
+        <!--<meta http-equiv="Pragma" content="no-cache" />-->
+        <!--<meta http-equiv="Expires" content="0" />-->
+        <title>Alpine Animal Arc | Owners</title>
+        <link rel="shortcut icon" href="img/logo_16p.png" type="image/x-icon">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/navbar.css" >
+        <script type="text/javascript" src="https://unpkg.com/vue@2.4.2"></script>
+        <script src="https://unpkg.com/axios@0.16.2/dist/axios.min.js"></script>
+    </head>
+    <body>
+    <!--Navigation bar starts here-->
+    <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        
+        <!-- Brand and toggle get grouped for better mobile display -->        
+        <div class="navbar-header">
+        <!-- Mobile view starts here. Disabled for now
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        Mobile view ends here. Disabled for now -->
+        <!--Logo/Brand image to the right from navbar-->
+        <a class="navbar-left" href="index.html" style="margin-right: 20px"><img src="img/logo_48p.png"></a>
+        <a class="navbar-brand" href="index.html">Alpine Animal Ark</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+            <a href="pets.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pets <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="cats.html">Cats</a></li>
+                <li><a href="dogs.html">Dogs</a></li>
+                <li><a href="exotics.html">Exotics</a></li>
+                <!--
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">One more separated link</a></li>
+                -->
+            </ul>
+            </li>
+            <li class="active"><a href="owners.html">Owners</a></li>
+            <li><a href="about_contact.html">About</a></li>
+        </ul>
+        <!--
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Link</a></li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+            </ul>
+            </li>
+        </ul>
+        -->
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+    </nav>
+    <!--Navigation bar stops here-->
+    <!--Breadcrumb-->
+    <ol class="breadcrumb">
+        <li><a href="index.php">Home</a></li>
+        <li class="active">Owners</li>
+    </ol>
+    
+    
+
+    <!--Content of the page-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                
+                <!--<div class="btn-group">-->
+                <!--    <a  id="list" class="btn btn-default btn-sm">-->
+                <!--     <span class="glyphicon glyphicon-th-list"></span>-->
+                <!--     Table-->
+                <!--    </a> -->
+                <!--    <a  id="grid" class="btn btn-default btn-sm">-->
+                <!--     <span class="glyphicon glyphicon-th"></span>-->
+                <!--     Tiles-->
+                <!--    </a>-->
+                <!--</div>-->
+                
+                <!-- component template -->
+                
+                    
+                
+                <script type="text/x-template" id="grid-template">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th v-for="key in columns"
+                          :class="{ active: sortKey == key }">
+                          <div v-if="key === 'photo'">
+                            Photo
+                          </div>
+                          <div v-else-if="key === 'last'" @click="sortName()" style="cursor: pointer;">
+                                Name
+                                <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                            </div>
+                            <div v-else-if="key === 'street'" @click="sortAddr" style="cursor: pointer;"> Address
+                                <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                            </div>
+                            <div v-else-if="key === 'phone'" @click="sortField(key)" style="cursor: pointer;">
+                                Phone
+                                <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                            </div>
+                            <div v-else-if="key === 'alive'" @click="sortField(key)" style="cursor: pointer;">Alive
+                                <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                            </div>
+                             <div v-else-if="key === 'notes'">Notes
+                            </div>
+                            <div v-else-if="key === 'link_to_pet'"> Link to pet
+                            </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="entry in filteredData">
+                        <td v-for="key in columns">
+                            <div v-if="key === 'photo'"  style="width:60px;">
+                                <img :src="entry[key]" class="img-responsive" alt="Responsive image"></img>
+                            </div>
+                            <div v-else-if="key === 'notes'"  style="width:60px;">
+                                <button class="btn btn-info">
+                                    Notes
+                                </button>
+                            </div> 
+                            <div v-else-if="key === 'last'"  style="width:80px;">
+                               {{entry['last']}}&nbsp;{{entry['first']}}
+                            </div> 
+                            <div v-else-if="key === 'link_to_pet'" style="width:80px;">
+                                <button class="btn btn-info">
+                                    &nbsp;&nbsp;Pet&nbsp;&nbsp;
+                                </button>
+                            </div>                               
+                            <div v-else-if="key === 'street'" style="width:200px;">
+                               {{entry['building']}}&nbsp;{{entry['street']}}&nbsp;{{entry['city']}}&nbsp;{{entry['state']}}&nbsp;{{entry['zip']}}
+                            </div> 
+                            <div v-else-if="key === 'alive'" style="width:60px;">
+                               {{entry['alive']}}
+                            </div> 
+                            <div v-else-if="key === 'phone'" style="width: 120px;">
+                               {{entry['phone']}}
+                            </div>
+                        </td>
+                        <td>
+                            <a title="No longer with us" @click="hide(entry['id'])" style="cursor: pointer;">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </script>
+                
+                
+                <!-- demo root element -->
+                <div id="demo">
+                  <!--<form id="search">-->
+                  <!--  Search <input name="query" v-model="searchQuery">-->
+                  <!--</form>-->
+                  <demo-grid
+                    :data="gridData"
+                    :columns="gridColumns"
+                    :filter-key="searchQuery">
+                  </demo-grid>
+                </div>
+                <!--End of table-->
+                
+                
+            </div><!--End col-md-8-->
+            
+        </div><!--End row-->
+        <div id="pagenation">
+            <a title="The first page"  style="cursor: pointer;" @click="goFirst()"> << </a>
+            &nbsp;&nbsp;
+            <a title="Previous page"  style="cursor: pointer;" @click="goPrev()"> < </a>
+            &nbsp;Page {{currPage}} of {{getNumOfPages()}}&nbsp;
+            <a title="Next page"  style="cursor: pointer;" @click="goNext()"> > </a>
+            &nbsp;&nbsp;
+            <a title="The last page"  style="cursor: pointer;"  @click="goLast()"> >> </a>
+      
+        </div>
+    </div><!--End container-->
+    
+    
+    <br><br><br><br>
+    <script>
+        // new Vue({
+        //     el: '#pagenation',
+        //     // props:{
+        //     //     numPages: Array,
+        //     //     table: String,
+        //     //     col: String,
+                
+        //     // },
+        //     data: {
+        //         currPage: 1,
+        //         numRows: 1 ,
+        //         //numPages: getNumOfPages
+        //     },
+        //     mounted(){
+        //         axios.get('calc_rows_owner.php', {
+        //                     params: {
+        //                       //table: 'owner',
+        //                       //col: 'cat'
+        //                     }
+        //             }).then(response => this.numRows = response.data);
+        //     },
+        //     methods: {
+        //         getNumOfPages: function(){
+        //             var numPages = this.numRows /10;
+        //             return numPages;
+        //         },
+        //         goFirst: function(){
+                    
+        //         },
+        //     }
+        // });
+    </script>
+    
+    </body>
+
+<!--Render the table using Vue-->
+    <script type="text/javascript" src="owner.js"></script>
+
+    <footer class="panel-footer navbar-fixed-bottom">
+        Copyright &copy; <?php echo date("Y"); ?> Oleksii Kolesnyk, 3660 Solutions | 
+        Contact information: <a href="mailto:3660solutions@my.uvu.edu">
+        3660solutions@my.uvu.edu</a>.
+    </footer>
+</html>
